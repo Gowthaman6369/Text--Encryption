@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Text Encryption</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Text Encryption</h1>
+        <textarea id="textInput" rows="4" placeholder="Enter text here..."></textarea>
+        <button onclick="encryptText()">Encrypt</button>
+        <textarea id="encryptedOutput" rows="4" placeholder="Encrypted text will appear here..." readonly></textarea>
+        <button onclick="decryptText()">Decrypt</button>
+        <textarea id="decryptedOutput" rows="4" placeholder="Decrypted text will appear here..." readonly></textarea>
+        <div id="errorDisplay" class="error" style="display: none;"></div>
+        <div id="successDisplay" class="success" style="display: none;"></div>
+    </div>
+    <script>
+        async function encryptText() {
+            const text = document.getElementById('textInput').value;
+            const response = await fetch('/encrypt', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ text })
+            });
+            const data = await response.json();
+            if (data.encrypted_text) {
+                document.getElementById('encryptedOutput').value = data.encrypted_text;
+                document.getElementById('successDisplay').innerText = 'Text encrypted successfully!';
+                document.getElementById('successDisplay').style.display = 'block';
+                document.getElementById('errorDisplay').style.display = 'none';
+            } else {
+                document.getElementById('errorDisplay').innerText = 'Encryption failed: ' + data.error;
+                document.getElementById('errorDisplay').style.display = 'block';
+                document.getElementById('successDisplay').style.display = 'none';
+            }
+        }
+
+        async function decryptText() {
+            const encryptedText = document.getElementById('encryptedOutput').value;
+            const response = await fetch('/decrypt', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ encrypted_text: encryptedText })
+            });
+            const data = await response.json();
+            if (data.decrypted_text) {
+                document.getElementById('decryptedOutput').value = data.decrypted_text;
+                document.getElementById('successDisplay').innerText = 'Text decrypted successfully!';
+                document.getElementById('successDisplay').style.display = 'block';
+                document.getElementById('errorDisplay').style.display = 'none';
+            } else {
+                document.getElementById('errorDisplay').innerText = 'Decryption failed: ' + data.error;
+                document.getElementById('errorDisplay').style.display = 'block';
+                document.getElementById('successDisplay').style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
