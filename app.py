@@ -10,8 +10,6 @@ cipher_suite = Fernet(key)
 
 # Set the path for templates folder
 template_dir = os.path.abspath('encryption/templates')
-#app = Flask(__name__, template_folder=template_dir, static_folder='encryption/static')
-
 @app.route('/')
 def index():
     return render_template('index.html')
