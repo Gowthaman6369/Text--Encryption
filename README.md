@@ -10,7 +10,7 @@
 
 1. **Clone the repository**:
     ```sh
-    git clone https://github.com/yourusername/Text-Encryption.git
+    git clone https://github.com/Gowthaman6369/Text-Encryption.git
     cd Text-Encryption
     ```
 
